@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     index page
+    <div class="card">
+        {% for pst in post %}
+            <a class="card-body" href= {% url 'post:post_detail' pst.id pst.slug %}>{{ pst.body|truncatewords:8 }}</a>
+        {% endfor %}
+    </div>
 {% endblock %}

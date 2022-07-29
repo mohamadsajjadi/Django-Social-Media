@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from post.models import Post
 from . import forms
 
 
@@ -68,4 +69,5 @@ class UserLogoutView(LoginRequiredMixin, View):
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        return render(request, 'account/profile.html', {'user': user})
+        posts = Post.objects.filter(author=user)
+        return render(request, 'account/profile.html', {'user': user, 'posts': posts})

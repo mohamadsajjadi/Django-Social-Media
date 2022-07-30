@@ -3,7 +3,7 @@
     index page
     <div class="card">
         {% for pst in post %}
-            <a class="card-body" href= {% url 'post:post_detail' pst.id pst.slug %}>{{ pst.body|truncatewords:8 }}</a>
+            <a class="card-body" href=" {{ pst.get_absolute_url }}">{{ pst.body|truncatewords:7 }}</a>
         {% endfor %}
     </div>
 {% endblock %}

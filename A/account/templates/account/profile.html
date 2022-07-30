@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     <h2 class="text-center"> {{ user.username }}</h2>
-     <div class="card">
+    <div class="card">
         {% for pst in posts %}
-            <a class="card-body" href= {% url 'post:post_detail' pst.id pst.slug %}>{{ pst.body|truncatewords:8 }}</a>
+            <a class="card-body" href=" {{ pst.get_absolute_url }}">{{ pst.body|truncatewords:8 }}</a>
         {% endfor %}
     </div>
 {% endblock %}

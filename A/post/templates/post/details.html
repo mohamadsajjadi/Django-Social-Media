@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p class="text-center">{{ post.author }} - {{ post.updated|date:"y N" }}</p>
+    <p class="text-center">wrote by : {{ post.author }} </p>
+    <p class="text-center">{{ post.updated|date:"y N" }}</p>
     <p>{{ post.body }}</p>
 {% endblock %}

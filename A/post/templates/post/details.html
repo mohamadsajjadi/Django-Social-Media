@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p class="text-center">wrote by : {{ post.author }} </p>
+    {% if request.user.id == post.author.id %}   {# important! #}
+        <a href="{% url 'post:post_delete' post.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'post:post_update' post.id %}" class="btn btn-info">Update</a>
+    {% endif %}
+    <p class="text-center">wrote by : <a
+            href="{% url 'account:user_profile' post.author.id %}">{{ post.author }}</a></p>
     <p class="text-center">{{ post.updated|date:"y N" }}</p>
     <p>{{ post.body }}</p>
 {% endblock %}

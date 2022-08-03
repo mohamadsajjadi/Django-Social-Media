@@ -4,6 +4,13 @@
     {% if request.user.id == user.id %}
         <a href="{% url 'post:post_create' %}" class="btn btn-info">Create</a>
     {% endif %}
+
+    {% if request.user.id != user.id and not is_following %}
+        <a class="btn btn-primary" href="{% url 'account:user_follow' user.id %}">Follow</a>
+    {% elif  request.user.id != user.id and is_following %}
+        <a class="btn btn-primary" href="{% url 'account:user_unfollow' user.id %}">Unfollow</a>
+    {% endif %}
+
     <div class="card">
         {% for pst in posts %}
             <a class="card-body" href=" {{ pst.get_absolute_url }}">{{ pst.body|truncatewords:8 }}</a>

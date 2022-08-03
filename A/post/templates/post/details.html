@@ -12,6 +12,8 @@
     <hr>
 
     {% if request.user.is_authenticated %}
+        <a class="{% if can_like %}disabled{% endif %} btn btn-primary col-2"
+           href="{% url 'post:like' post.id %}">Like {{ post.likes_count }}</a>
         <form action="" method="post">
             {% csrf_token %}
             {{ form.as_p }}

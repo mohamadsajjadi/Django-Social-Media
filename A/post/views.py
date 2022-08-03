@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Post, Comment
+from .models import Post, Comment, Vote
 from .forms import CreateUpdatePostForm, CommentCreateForm, CommentReplyForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
 
 
 class PostDetails(View):
@@ -19,9 +20,12 @@ class PostDetails(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class
+        can_like = False
+        if request.user.is_authenticated and self.post_instance.user_can_like(request.user):
+            can_like = True
         comments = self.post_instance.pcomment.filter(is_reply=False)
         return render(request, 'post/details.html', {'post': self.post_instance, 'comments': comments, 'form': form,
-                                                     'reply_form': self.form_class_reply})
+                                                     'reply_form': self.form_class_reply, 'can_like': can_like})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -109,4 +113,16 @@ class CommentReplyView(LoginRequiredMixin, View):
             reply.is_reply = True
             reply.save()
             messages.success(request, 'your reply submitted successfully!', 'success')
+        return redirect('post:post_detail', post.id, post.slug)
+
+
+class UserLikeView(LoginRequiredMixin, View):
+    def get(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        vote = Vote.objects.filter(user=request.user, post=post)
+        if vote.exists():
+            messages.error(request, 'You liked this post before!', 'danger')
+        else:
+            Vote.objects.create(user=request.user, post=post)
+            messages.success(request, 'you like this post successfully!', 'success')
         return redirect('post:post_detail', post.id, post.slug)

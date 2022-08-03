@@ -23,7 +23,7 @@ class Post(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ucomments')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='pcomment')
-    reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='ccomment', blank=True, null=True)
+    reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='rcomment', blank=True, null=True)
     is_reply = models.BooleanField(default=False)
     body = models.TextField(max_length=400)
     created = models.DateTimeField(auto_now_add=True)

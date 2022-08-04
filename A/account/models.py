@@ -6,3 +6,9 @@ class Relation(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     created = models.DateTimeField(auto_now_add=True)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    age = models.PositiveSmallIntegerField()
+    bio = models.TextField()

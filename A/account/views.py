@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
     PasswordResetCompleteView
 from . import forms
+from .forms import EditUserProfileForm
 from .models import Relation
 
 
@@ -127,3 +128,20 @@ class UserUnfollowView(LoginRequiredMixin, View):
         else:
             messages.error(request, "you don't have follow this user!", 'danger')
         return redirect('account:user_profile', user.id)
+
+
+class EditUserProfileView(LoginRequiredMixin, View):
+    form_class = EditUserProfileForm
+
+    def get(self, request):
+        form = self.form_class(instance=request.user.profile, initial={'email': request.user.email})
+        return render(request, 'account/edit_profile_form.html', {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            request.user.email = form.cleaned_data['email']
+            request.user.save()
+            messages.success(request, 'edit profile successfully!', 'success')
+        return redirect("account:user_profile", request.user.id)

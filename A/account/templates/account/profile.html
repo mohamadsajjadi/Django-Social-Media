@@ -2,7 +2,8 @@
 {% block content %}
     <h2 class="text-center"> {{ user.username }}</h2>
     {% if request.user.id == user.id %}
-        <a href="{% url 'post:post_create' %}" class="btn btn-info">Create</a>
+        <a href="{% url 'post:post_create' %}" class="btn btn-info col-1">Create</a>
+        <a class="btn btn-info col-1" href="{% url 'account:edit_user' %}">Edit</a>
     {% endif %}
 
     {% if request.user.id != user.id and not is_following %}
